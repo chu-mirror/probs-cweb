@@ -1,0 +1,76 @@
+@* Error handling.
+Defined functions used to locate different conditions
+when an error occur.  
+Mainly two conditions under consideration:
+
+1. Related to a system call.
+
+2. Unrelated to a system call.
+
+@<prototypes@>=
+void err_sys(const char *fmt, ...); /* condition 1, print a message and terminate */
+void err_dump(const char *fmt, ...); /* condition 1, print a message, dump core, and terminate */
+void err_quit(const char *fmt, ...); /* condition 2, print a message and terminate */
+
+@ @<includes@>=
+#include <errno.h>
+#include <stdarg.h>
+
+@ Use a helper function |err_doit| to print message.
+Caller specifies |errnoflag| to decide whether to append |errno| imformation.
+@c
+void 
+err_doit(int errnoflag, const char* fmt, va_list ap)
+{
+	char buf[MAXLINE];
+
+	vsnprintf(buf, MAXLINE-1, fmt, ap);
+	if (errnoflag)
+		snprintf(buf + strlen(buf), MAXLINE - strlen(buf) - 1, 
+		  ": %s", strerror(errno));
+	strcat(buf, "\n");
+	fflush(stdout);
+	fputs(buf, stderr);
+	fflush(NULL);
+}
+
+
+@ Fatal error related to a system call, 
+print a message and terminate.
+@c
+#define ERR_PRINT(flag) { \
+	va_list ap; \
+	va_start(ap,fmt) ; \
+	err_doit(flag,fmt,ap) ; \
+	va_end(ap) ; \
+}
+void 
+err_sys(const char *fmt, ...)
+{
+	ERR_PRINT(1);
+	exit(1);
+}
+
+@ Fatal error related to a system call,
+print a message, dump core, and terminate.
+@c
+void 
+err_dump(const char *fmt, ...)
+{
+
+	ERR_PRINT(1);
+	abort();
+	exit(1);
+}
+
+@ Fatal error unrelated to a system call,
+print a message and terminate.
+@c
+void
+err_quit(const char *fmt, ...)
+{
+	ERR_PRINT(0);
+	exit(1);
+}
+
+#undef ERR_PRINT

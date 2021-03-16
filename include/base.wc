@@ -1,0 +1,9 @@
+@* Basics.
+
+@d MAXLINE 1000
+
+@<includes@>=
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+

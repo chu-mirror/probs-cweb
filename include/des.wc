@@ -1,0 +1,8 @@
+@** A simple library.
+The following chapters defined a simple library for code exercises.
+It will not be so sophisticated, but supposed to be convenient.
+
+@i base.wc
+@i stack.wc
+@i err.wc
+@i mem.wc

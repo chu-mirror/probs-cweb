@@ -1,0 +1,113 @@
+@* Stack.
+Stack for pointers, do not manage memory itself.
+
+@<data@>=
+typedef struct stack_t *stack_t;
+
+@ @c 
+#define T stack_t
+struct T {
+	struct stack_elem_t {
+		void *x;
+		struct stack_elem_t *link;
+	} *head;
+};
+
+typedef struct stack_elem_t *stack_elem_t;
+
+@<functions of \.{stack}@>@/
+
+#undef T
+
+@ Some illegel operations are checked, for example, 
+to transfer a null pointer to function,
+to pop a stack when empty.
+@<functions of \.{stack}@>=
+T
+stack_new()
+{
+	T stk;
+
+	NEW(stk);
+	NEW0(stk->head); /* initialize a tail element with 0 */
+
+	return stk;
+}
+
+void
+stack_free(T stk)
+{
+	FREE(stk->head);
+	FREE(stk);
+}
+
+int
+stack_empty(T stk)
+{
+	return stk->head->link == NULL;
+}
+
+void
+stack_push(T stk, void *x)
+{
+	stack_elem_t ele;
+
+	if (stk == NULL) {
+		err_quit("pushing to a null pointer");
+	}
+	NEW(ele);
+	ele->x = x;
+	ele->link = stk->head;
+	stk->head = ele;
+}
+
+void *
+stack_pop(T stk)
+{
+	stack_elem_t ele;
+	void *x;
+
+	if (stk == NULL) {
+		err_quit("popping a null pointer");
+	}
+	if (stack_empty(stk)) {
+		err_quit("popping a empty stack");
+	}
+	@<set |ele| and |x| to top of stack@>@;
+
+	stk->head = ele->link; /* pop */
+	FREE(ele);
+
+	return x;
+}
+
+void *
+stack_top(T stk)
+{
+	stack_elem_t ele;
+	void *x;
+
+	if (stk == NULL) {
+		err_quit("topping a null pointer");
+	}
+	if (stack_empty(stk)) {
+		err_quit("topping a empty stack");
+	}
+	@<set |ele| and |x| to top of stack@>@;
+
+	return x;
+}
+
+@ @<set |ele| and |x| to top of stack@>=
+ele = stk->head;
+x = ele->x;
+
+@ @<prototypes@>=
+stack_t stack_new(void);
+void stack_free(stack_t);
+int stack_empty(stack_t);
+void stack_push(stack_t, void *);
+void *stack_pop(stack_t);
+void *stack_top(stack_t);
+
+

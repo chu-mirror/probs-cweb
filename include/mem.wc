@@ -1,0 +1,81 @@
+@* Memory management.
+All nontrivial \.{C} programs allocate memory at runtime.
+And I'm going to write nontrivial \.{C} programs,
+so careful reflection should be paid on memory management.
+
+This chapter repackages the standard \.{C} library's three
+memory-management routines: |malloc|, |calloc|, and |free|,
+aiming to provide a interface that are less prone to error
+and provide a few additional capabilities.
+
+@ The two basic functions to allocate memory, 
+use additional argument |line| to report bugs.
+The standard library use type |size_t| for arguments,
+but arguments are declared |long| here to avoid errors
+when negative numbers are passed to unsigned arguments.
+@f line x
+@c
+void *
+mem_alloc(long nbytes, int line)
+{
+	void *p;
+
+	if (nbytes <= 0) {
+		err_quit("allocating %d bytes memory in line %d", nbytes, line);
+	}
+	p = malloc(nbytes);
+	if (p == NULL) {
+		err_sys("failed to allocate memory in line %d", line);
+	}
+	return p;
+}
+
+void *
+mem_calloc(long count, long nbytes, int line)
+{
+	void *p;
+
+	if (nbytes <= 0 || count <= 0) {
+		err_quit("allocating %d times %d bytes memory in line %d", 
+			count, nbytes, line);
+	}
+	p = calloc(count, nbytes);
+	if (p == NULL) {
+		err_sys("failed to allocate memory in line %d", line);
+	}
+	return p;
+}
+
+@ @<prototypes@>=
+void *mem_alloc(long, int);
+void *mem_calloc(long, long, int);
+
+@ Use macro |__LINE__| to get current line's number.
+@d ALLOC(nbytes) mem_alloc((nbytes), __LINE__)
+@d CALLOC(count, nbytes) mem_calloc((count), (nbytes), __LINE__)
+
+@ It's common to use idiom |p = malloc(sizeof *p)|,
+encapsulate the allocation and assignment with macros. 
+|NEW0| allocate a initialized block of zeros. 
+@d NEW(p) ((p) = ALLOC((long)sizeof *(p)))
+@d NEW0(p) ((p) = CALLOC(1, (long)sizeof *(p)))
+
+@ Memory is deallocated by |mem_free|, 
+like the previous two functions,
+use |line| to report bugs.
+Deallocating of a null pointer is regarded as a bug.
+|FREE| does two things, invokes |mem_free| and sets |ptr| to the null pointer.
+Note that |FREE| evaluates ptr more than once.
+@d FREE(ptr) ((void)(mem_free((ptr), __LINE__), (ptr) = 0))
+@c
+void
+mem_free(void *ptr, int line)
+{
+	if (ptr == NULL) {
+		err_quit("deallocating a NULL pointer in line %d", line);
+	}
+	free(ptr);
+}
+
+@ @<prototypes@>=
+void mem_free(void *, int);
