@@ -12,5 +12,5 @@ and wrote in literate program form.
 Maintainance of infrastructure and solving of problems
 are separated to different branches,
 to clone the infrastructure separately is possible,
-check out branch _base_ if you want.
+check out branch _infra_ if you want.
 
