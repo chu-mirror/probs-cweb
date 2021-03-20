@@ -1,18 +1,20 @@
 CFLAGS = -g
-CWEBENV = CWEBINPUTS=include
-CTANGLE = ${CWEBENV} ctangle
-CWEAVE = ${CWEBENV} cweave
+CWEBINPUTS = include
+CTANGLE = CWEBINPUTS=$$CWEBINPUTS ctangle
+CWEAVE = CWEBINPUTS=$$CWEBINPUTS cweave
 
 .SUFFIXES: .w .pdf .tex
 
 .w.c:
-	${CTANGLE} $< - $@
+	@CWEBINPUTS=$$(realpath ${CWEBINPUTS}); \
+		cd ${@D}; ${CTANGLE} $< 
 
 .w.tex:
-	${CWEAVE} $< - $@
+	@CWEBINPUTS=$$(realpath ${CWEBINPUTS}); \
+		cd ${@D}; ${CWEAVE} $< 
 	
 .tex.pdf:
-	cd ${<D}; pdftex $<
+	cd ${@D}; pdftex $<
 	
 new:
 	@echo -n "new folder's name: " && \

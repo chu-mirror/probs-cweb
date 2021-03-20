@@ -11,6 +11,7 @@ UPMAKE = dir=$$(dirname $$web_path); \
 	
 .w: 
 	@web_path=$(realpath $<); target=${@F}; ${UPMAKE}
+	make input
 
 .w.pdf:
 	@web_path=$(realpath $<); target=${@F}; ${UPMAKE}
@@ -38,4 +39,5 @@ new-folder:
 		cp Makefile $$fold/Makefile
 
 clean:
-	$(RM) `ls | grep -v '\.w' | grep -v 'Makefile'`
+	${RM} `ls | grep -v '\.w' | grep -v 'Makefile'`
+

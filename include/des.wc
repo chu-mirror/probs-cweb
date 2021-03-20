@@ -20,3 +20,4 @@ keep the interfaces of modules as neat as possible.
 @i stack.wc
 @i err.wc
 @i mem.wc
+@i input.wc
