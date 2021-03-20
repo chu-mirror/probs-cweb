@@ -2,6 +2,20 @@
 The following chapters defined a simple library for code exercises.
 It will not be so sophisticated, but supposed to be convenient.
 
+To use this library, programs should be wrote in literate program form.
+The library assumed existing of three chunks: |@<includes@>|, |@<data@>|,
+and |@<prototypes@>|.
+Declarations go to correct places when the chunks specified in right order.
+Add {\tt @@i des.wc} at end of file to include the library.
+
+The code from the library are appended to the file of your code,
+for convenience of handing in solution to platforms.
+So the code you write share a common namespace with the library,
+and all routines, data, macros share the common namespace too.
+Pay attention if you want to extend the library yourself,
+keep the interfaces of modules as neat as possible.
+
+
 @i base.wc
 @i stack.wc
 @i err.wc
