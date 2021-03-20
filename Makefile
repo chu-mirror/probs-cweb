@@ -1,3 +1,4 @@
+CFLAGS = -g
 CWEBENV = CWEBINPUTS=include
 CTANGLE = ${CWEBENV} ctangle
 CWEAVE = ${CWEBENV} cweave
