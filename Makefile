@@ -1,4 +1,4 @@
-PLATFORMS = 
+PLATFORMS = AtCoder
 
 CFLAGS = -g
 CWEBINPUTS = include
