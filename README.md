@@ -1,4 +1,4 @@
-## README
+# README
 
 It's just a collection of solutions to coding problems
 on some well-known online judge platforms or contests.
@@ -14,7 +14,7 @@ are separated to different branches,
 to clone the infrastructure separately is possible,
 check out branch _infra_ if you want.
 
-# Usage
+## Usage
 
 I hope that the code could explain itself, but it failed to do that, clearly.
 Two kinds of _Makefile_ are used, one in root directory
