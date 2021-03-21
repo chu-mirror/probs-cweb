@@ -1,3 +1,5 @@
+PLATFORMS = 
+
 CFLAGS = -g
 CWEBINPUTS = include
 CTANGLE = CWEBINPUTS=$$CWEBINPUTS ctangle
@@ -15,10 +17,23 @@ CWEAVE = CWEBINPUTS=$$CWEBINPUTS cweave
 	
 .tex.pdf:
 	cd ${@D}; pdftex $<
+
+.PHONY: new refresh clean
 	
 new:
 	@echo -n "new folder's name: " && \
 		read fold && \
 		mkdir $$fold && \
 		cp branch.mk $$fold/Makefile
+
+refresh:
+	@for dir in ${PLATFORMS}; do \
+		ln -sf ../branch.mk $$dir/Makefile; \
+		cd $$dir; make refresh; cd ..;\
+	done
+	
+clean:
+	@for dir in ${PLATFORMS}; do \
+		cd $$dir; make clean-all; cd ..; \
+	done
 

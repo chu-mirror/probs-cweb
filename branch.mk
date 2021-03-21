@@ -19,6 +19,8 @@ UPMAKE = dir=$$(dirname $$web_path); \
 .w.pdf:
 	@web_path=$(realpath $<); target=${@F}; ${UPMAKE}
 
+.PHONY: new new-folder clean clean-all gen-test refresh
+
 new:
 	@echo -n "new file's name: " && \
 		read file && \
@@ -42,7 +44,19 @@ new-folder:
 		cp Makefile $$fold/Makefile
 
 clean:
-	${RM} `ls | grep -v '\.w' | grep -v 'Makefile'`
+	@${RM} `ls -p | grep -v '/' | grep -v '\.w' | grep -v 'Makefile'`
+
+clean-all: clean
+	@for dir in `ls -p | grep '/'`; do \
+		cd $$dir; make clean-all; cd ..; \
+	done
+	@${RM} Makefile
+
+refresh:
+	@for dir in `ls -p | grep '/'`; do \
+		ln -sf ../Makefile $$dir/Makefile; \
+		cd $$dir; make refresh; cd ..; \
+	done
 
 gen-test: input output
 	@echo -e "\
