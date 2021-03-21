@@ -24,7 +24,7 @@ new:
 	@echo -n "new folder's name: " && \
 		read fold && \
 		mkdir $$fold && \
-		cp branch.mk $$fold/Makefile
+		ln -s ../branch.mk $$fold/Makefile
 
 refresh:
 	@for dir in ${PLATFORMS}; do \

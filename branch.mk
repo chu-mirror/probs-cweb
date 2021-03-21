@@ -41,7 +41,7 @@ new-folder:
 	@echo -n "new folder's name: " && \
 		read fold && \
 		mkdir $$fold && \
-		cp Makefile $$fold/Makefile
+		ln -s ../Makefile $$fold/Makefile
 
 clean:
 	@${RM} `ls -p | grep -v '/' | grep -v '\.w' | grep -v 'Makefile'`

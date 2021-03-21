@@ -1,4 +1,4 @@
-# README
+## README
 
 It's just a collection of solutions to coding problems
 on some well-known online judge platforms or contests.
@@ -13,4 +13,34 @@ Maintainance of infrastructure and solving of problems
 are separated to different branches,
 to clone the infrastructure separately is possible,
 check out branch _infra_ if you want.
+
+# Usage
+
+I hope that the code could explain itself, but it failed to do that, clearly.
+Two kinds of _Makefile_ are used, one in root directory
+(The _Makefile_ in current directory), one in branch directories(_branch.mk_).
+
+If you are at root, the following targets are supported.
+```
+# create a new folder, then, 
+# create a symbol link to branch.mk in that folder
+$ make new 
+
+# recreate symbol links in all branch directories, 
+# which specified by PLATFORMS macro in Makefile
+$ make refresh 
+
+# delete all temporary files and symbol links
+$ make clean
+```
+
+If you are at branch,
+```
+# create a new file, and edit it with editor, 
+# which specified by EDITOR macro in branch.mk
+make new
+
+# delete all temporary files
+make clean
+```
 
