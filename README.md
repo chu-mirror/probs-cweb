@@ -38,9 +38,13 @@ If you are at branch,
 ```
 # create a new file, and edit it with editor, 
 # which specified by EDITOR macro in branch.mk
-make new
+$ make new
+
+# create a new foloder,
+# the same as __make new__ at root
+$ make new-folder
 
 # delete all temporary files
-make clean
+$ make clean
 ```
 
