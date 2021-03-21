@@ -1,0 +1,65 @@
+@* Code testing.
+Library's users can automatically generate a test framework
+by specifying a code chunk named |@<test data@>|,
+which consists of pairs of input and output string.
+The test framework is based on a simple model,
+give sample inputs, then, check outputs.
+
+This chapter defined a program named \.{sample}
+to store the sample test data specified by user.
+Read code to get more information.
+
+@(sample.c@>=
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_DATA_LENGTH 10000
+
+char samples[][MAX_DATA_LENGTH] = {
+	@<test data@>
+};
+
+int
+main(int argc, char *argv[])
+{
+	int n = 0, max_case;
+	int iflag = 0, oflag = 0;
+	@<handle arguments of \.{sample}, get |n| and set flags@>@;
+	@<compute |max_case| from the size of |samples|@>@;
+
+	if (n == 0) { /* print |max_case| if |n| is 0 */
+		printf("%d", max_case);
+	} else { 
+		/* if the value of |n| beyond the scope */
+		n = n >= 1 && n <= max_case ? n : max_case+1; 
+		if (iflag) puts(samples[2*(n-1)]); /* data is stored from index 0 */
+		if (oflag) puts(samples[2*(n-1)+1]); 
+	}
+
+}
+
+@ Supposed a number argument.
+@<handle arguments of \.{sample}, get |n| and set flags@>=
+if (argc == 2) {
+	n = atoi(argv[1]);
+} 
+
+if (!strcmp(argv[0], "./input")) {
+	iflag = 1;
+} else if (!strcmp(argv[0], "./output")) {
+	oflag = 1;
+} else {
+	fprintf(stderr, "unvalid invoking\n");
+	exit(1);
+}
+
+@ Substract 1 from the result, because of the warning message.
+@<compute |max_case| from the size of |samples|@>=
+max_case = sizeof samples / sizeof samples[0] / 2 - 1;
+
+@ If user use an illegal argument to invoke \.{sample},
+print a warning message.
+@<test data@>=
+"No test data is stored here...",@/
+"No output."
