@@ -11,7 +11,7 @@ CWEAVE = CWEBINPUTS=$$CWEBINPUTS cweave
 .w.c:
 	@CWEBINPUTS=$$(realpath ${CWEBINPUTS}); \
 		cd ${@D}; ${CTANGLE} $<; \
-		cat -s $@ | sed '/^#line/d; /^\/\*/d;' > $@.temp; \
+		sed '/^#line/d; /^\/\*/d;' $@ | cat -s - > $@.temp; \
 		indent ${INDENT_FLAGS} $@.temp -o $@
 
 .w.tex:
