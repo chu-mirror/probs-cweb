@@ -1,5 +1,3 @@
-EDITOR = sb
-
 UPMAKE = dir=$$(dirname $$web_path); \
 	target=$$dir/$$target; \
 	cd ..; make $$target

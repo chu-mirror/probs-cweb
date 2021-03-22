@@ -37,10 +37,16 @@ $ make clean
 If you are at branch,
 ```
 # create a new file, and edit it with editor, 
-# which specified by EDITOR macro in branch.mk
-make new
+# which can be specified by EDITOR macro in branch.mk,
+# but to state it as enviroment variable is recommonded,
+# some other programs(for example, visudo) also use $EDITOR
+$ make new
+
+# create a new foloder,
+# the same as __make new__ at root
+$ make new-folder
 
 # delete all temporary files
-make clean
+$ make clean
 ```
 
