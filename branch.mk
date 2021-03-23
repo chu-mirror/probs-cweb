@@ -1,3 +1,5 @@
+INDENT_FLAGS = -linux
+
 UPMAKE = dir=$$(dirname $$web_path); \
 	target=$$dir/$$target; \
 	cd ..; make $$target
@@ -6,6 +8,8 @@ UPMAKE = dir=$$(dirname $$web_path); \
 
 .w.c:
 	@web_path=$(realpath $<); target=${@F}; ${UPMAKE}
+	@sed '/^#line/d; /^\/\*/d;' $@ | cat -s - > $@.temp; \
+		indent ${INDENT_FLAGS} $@.temp -o $@
 	
 .w: 
 	@web_path=$(realpath $<); target=${@F}; ${UPMAKE}
