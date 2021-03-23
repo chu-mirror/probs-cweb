@@ -14,7 +14,6 @@ void err_quit(const char *fmt, ...); /* condition 2, print a message and termina
 
 @ @<includes@>=
 #include <errno.h>
-#include <stdarg.h>
 
 @ Use a helper function |err_doit| to print message.
 Caller specifies |errnoflag| to decide whether to append |errno| imformation.

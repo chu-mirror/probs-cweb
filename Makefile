@@ -1,6 +1,5 @@
 PLATFORMS = AtCoder
 
-INDENT_FLAGS = -orig
 CFLAGS = -g
 CWEBINPUTS = include
 CTANGLE = CWEBINPUTS=$$CWEBINPUTS ctangle
@@ -10,9 +9,7 @@ CWEAVE = CWEBINPUTS=$$CWEBINPUTS cweave
 
 .w.c:
 	@CWEBINPUTS=$$(realpath ${CWEBINPUTS}); \
-		cd ${@D}; ${CTANGLE} $<; \
-		sed '/^#line/d; /^\/\*/d;' $@ | cat -s - > $@.temp; \
-		indent ${INDENT_FLAGS} $@.temp -o $@
+		cd ${@D}; ${CTANGLE} $<
 
 .w.tex:
 	@CWEBINPUTS=$$(realpath ${CWEBINPUTS}); \
