@@ -1,5 +1,6 @@
 @* Stack.
 Stack for pointers, do not manage memory itself.
+Implemented with \.{list}.
 
 @<data@>=
 typedef struct stack_t *stack_t;
@@ -7,13 +8,8 @@ typedef struct stack_t *stack_t;
 @ @c 
 #define T stack_t
 struct T {
-	struct stack_elem_t {
-		void *x;
-		struct stack_elem_t *link;
-	} *head;
+	list_t head;
 };
-
-typedef struct stack_elem_t *stack_elem_t;@/
 
 @<functions of \.{stack}@>@/
 
@@ -44,27 +40,26 @@ stack_free(T stk)
 int
 stack_empty(T stk)
 {
-	return stk->head->link == NULL;
+	return cdr(stk->head) == NULL;
 }
 
 void
 stack_push(T stk, void *x)
 {
-	stack_elem_t ele;
+	list_t nd;
 
 	if (stk == NULL) {
 		err_quit("pushing to a null pointer");
 	}
-	NEW(ele);
-	ele->x = x;
-	ele->link = stk->head;
-	stk->head = ele;
+	nd = cons(x, NULL);
+	cdr(nd) = stk->head;
+	stk->head = nd;
 }
 
 void *
 stack_pop(T stk)
 {
-	stack_elem_t ele;
+	list_t nd;
 	void *x;
 
 	if (stk == NULL) {
@@ -73,10 +68,10 @@ stack_pop(T stk)
 	if (stack_empty(stk)) {
 		err_quit("popping a empty stack");
 	}
-	@<set |ele| and |x| to top of stack@>@;
+	@<set |nd| and |x| to top of stack@>@;
 
-	stk->head = ele->link; /* pop */
-	FREE(ele);
+	stk->head = cdr(nd); /* pop */
+	FREE(nd);
 
 	return x;
 }
@@ -84,7 +79,7 @@ stack_pop(T stk)
 void *
 stack_top(T stk)
 {
-	stack_elem_t ele;
+	list_t nd;
 	void *x;
 
 	if (stk == NULL) {
@@ -93,14 +88,14 @@ stack_top(T stk)
 	if (stack_empty(stk)) {
 		err_quit("topping a empty stack");
 	}
-	@<set |ele| and |x| to top of stack@>@;
+	@<set |nd| and |x| to top of stack@>@;
 
 	return x;
 }
 
-@ @<set |ele| and |x| to top of stack@>=
-ele = stk->head;
-x = ele->x;
+@ @<set |nd| and |x| to top of stack@>=
+nd = stk->head;
+x = car(nd);
 
 @ @<prototypes@>=
 stack_t stack_new(void);

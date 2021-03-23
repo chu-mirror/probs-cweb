@@ -1,0 +1,98 @@
+@* List.
+A \.{list} is a sequence of zero or more pointers.
+I implement it as a sequence of nodes consisting of two fields,
+one is a pointer to next node,
+another is a pointer to value binded to this node.
+A \.{list} can simply be represented by the head node(the first of the sequence of nodes),
+an empty \.{list} is a null pointer.
+
+@ Most ADTs hide the representation details of their types.
+But \.{list} reveals these details.
+@<data@>=
+typedef struct list_t *list_t;
+
+struct list_t {
+	list_t rest;
+	void *first;
+};
+
+@ @<prototypes@>=
+#define T list_t
+@<list: prototypes@>
+#undef T
+
+@ @c
+#define T list_t
+@<functions of \.{list}@>
+#undef T
+
+@ The basic functions and macros to operate on a list.
+|car|, |cdr|, and |cons| are from \.{lisp}, perform the similar functions.
+Because |car| returns void pointers, a transformation should be made,
+the common use of |car| is |((type_t)car(list))->x|.
+|list_push| add a node to the head to form a new list.
+
+@d car(l) ((l)->first)
+@d cdr(l) ((l)->rest)
+@d cons(x, l) (list_push((l), (void *)(x)))
+
+@<functions of \.{list}@>=
+T
+list_push(T list, void *x)
+{
+	T nl;
+
+	NEW(nl);
+	nl->first = x;
+	nl->rest = list;
+
+	return nl;
+}
+
+@ @<list: prototypes@>=
+T list_push(T, void*);
+
+@ Besides the basic interfaces,
+because \.{C} do not have garbege collector,
+we should free the nodes not in use by hand.
+This can be done by |FREE| macro like other data types.
+For example: |nl = cdr(li); FREE(li)| get a new list |nl|,
+which contains the remaining nodes of |li|. 
+
+@ Functions to improve functionality.
+|list_length| returns length of the list;
+|list_append| append a list to the end of another list;
+
+@<functions of \.{list}@>=
+
+int
+list_length(T list)
+{
+	int len;
+	T remain = list;
+
+	for (; remain; remain = cdr(remain)) {
+		len++;
+	}
+
+	return len;
+}
+
+T
+list_append(T list1, T list2)
+{
+	list_t nd;
+
+	if (list1 == NULL) {
+		return list2;
+	}
+
+	for (nd = list1; nd->rest; nd = cdr(nd)) ;
+	nd->rest = list2;
+
+	return list1;
+}
+
+@ @<list: prototypes@>=
+int list_length(T);
+T list_append(T, T);
