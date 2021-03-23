@@ -33,8 +33,8 @@ main(int argc, char *argv[])
 	} else { 
 		/* if the value of |n| beyond the scope */
 		n = n >= 1 && n <= max_case ? n : max_case+1; 
-		if (iflag) puts(samples[2*(n-1)]); /* data is stored from index 0 */
-		if (oflag) puts(samples[2*(n-1)+1]); 
+		if (iflag) fputs(samples[2*(n-1)], stdout); /* data is stored from index 0 */
+		if (oflag) fputs(samples[2*(n-1)+1], stdout); 
 	}
 
 }
