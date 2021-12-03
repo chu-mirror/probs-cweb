@@ -16,14 +16,14 @@ check out branch _infra_ if you want.
 
 ## Usage
 
-I hope that the code could explain itself, but it failed to do that, clearly.
+I hope that the code could explain itself, but it failed to do that, apparently.
 Two kinds of _Makefile_ are used, one in root directory
-(The _Makefile_ in current directory), one in branch directories(_branch.mk_).
+(The _Makefile_ in current directory), one in sub-directories(_branch.mk_).
 
 If you are at root, the following targets are supported.
 ```
 # create a new folder, then, 
-# create a symbol link to branch.mk in that folder
+# create a symbol link of branch.mk in that folder
 $ make new 
 
 # recreate symbol links in all branch directories, 
@@ -37,13 +37,13 @@ $ make clean
 If you are at branch,
 ```
 # create a new file, and edit it with editor, 
-# which can be specified by EDITOR macro in branch.mk,
-# but to state it as enviroment variable is recommonded,
-# some other programs(for example, visudo) also use $EDITOR
+# which can be specified by ${EDITOR} in branch.mk,
+# but to state it as an environment variable is recommended,
+# some other programs(for example, visudo) also use $EDITOR.
 $ make new
 
-# create a new foloder,
-# the same as __make new__ at root
+# create a new folder,
+# the same as "make new" at root
 $ make new-folder
 
 # delete all temporary files
